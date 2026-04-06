@@ -1,3 +1,6 @@
+# Maximus Fernandez
+# Python Merge Assignment
+
 import pandas as pd
 
 # lists to hold column names and year labels
@@ -11,9 +14,9 @@ for i in range(2009, 2027, 1):
     highcol = 'high' + str(i)
     lowcol = 'low' + str(i)
 
-    df = pd.read_csv(filename, header=0,
-                     names=['station','name','elevation','lat','long',yearcol,
-                            'mmdd',precipcol,highcol,lowcol])
+    df = pd.read_csv(filename, header=0, 
+                     names=['station','name','elevation','lat',
+                            'long',yearcol,'mmdd',precipcol,highcol,lowcol])
 
     # filter out bad precipitation readings
     df = df[df[precipcol] != -9999]
@@ -24,6 +27,7 @@ for i in range(2009, 2027, 1):
     # drop unused columns
     df.drop(['station','name','elevation','lat','long'], axis=1, inplace=True)
 
+    # merge with previous years' data
     if i == 2009:
         allweather = df
         precips = [precipcol]
@@ -31,13 +35,16 @@ for i in range(2009, 2027, 1):
         allweather = allweather.merge(df, on='mmdd', how='outer')
         precips.append(precipcol)
 
+    # add year label for heatmap
     yearnames.append(str(i))
 
 import plotly.express as px
 
+# create heatmap of precipitation by month/day and year
 fig = px.imshow(allweather[precips], y=allweather['mmdd'], x=yearnames,
                 color_continuous_scale='blues',
                 labels=dict(x='Year', y='Month/Day', color='Precipitation (inches)'))
 
+# save to HTML file
 fig.write_html('precip_heatmap.html')
 print('Done! Written to precip_heatmap.html')
