@@ -39,35 +39,5 @@ fig = px.imshow(allweather[precips], y=allweather['mmdd'], x=yearnames,
                 color_continuous_scale='blues',
                 labels=dict(x='Year', y='Month/Day', color='Precipitation (inches)'))
 
-fig.update_layout(title='')
-
-# get just the plotly div/script (not a full HTML page)
-chart_html = fig.to_html(full_html=False, include_plotlyjs='cdn')
-
-# build the final HTML with descriptive text and NOAA link
-html_content = f"""<!DOCTYPE html>
-<html>
-<head>
-    <title>Summer Storms in Columbia</title>
-</head>
-<body>
-    <h1>Summer Storms in Columbia, SC</h1>
-    <p>
-        The visualization below shows the amount of precipitation recorded at the USC station by the
-        <a href="https://www.ncdc.noaa.gov/" target="_blank">National Oceanic and Atmospheric Administration</a>
-        during June, July, and August of each year from 2009 to 2026.
-    </p>
-    <p>
-        Summer thunderstorms are a defining feature of Columbia's climate. The heatmap reveals that
-        rainfall is often concentrated in short, intense bursts rather than spread evenly across the season.
-        Some years, like 2015, saw notably heavy downpours during certain stretches of summer.
-    </p>
-    {chart_html}
-</body>
-</html>
-"""
-
-with open('precip_heatmap.html', 'w') as f:
-    f.write(html_content)
-
+fig.write_html('precip_heatmap.html')
 print('Done! Written to precip_heatmap.html')
