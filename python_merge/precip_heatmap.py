@@ -47,4 +47,3 @@ fig = px.imshow(allweather[precips], y=allweather['mmdd'], x=yearnames,
 
 # save to HTML file
 fig.write_html('precip_heatmap.html')
-print('Done! Written to precip_heatmap.html')
